@@ -45,13 +45,15 @@ resource "azurerm_subnet" "project1" {
 }
 
 # step-3: create network security group
+# refer: https://registry.terraform.io/modules/Azure/network-security-group/azurerm/latest
+# refer https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_group
 resource "azurerm_network_security_group" "project1" {
   name                = "${var.prefix}-netSecGrp"
   location            = azurerm_resource_group.project1.location
   resource_group_name = azurerm_resource_group.project1.name
-  security_group_name = "${var.prefix}-nsg"
-  source_address_prefix = ["10.0.0.0/22"]
+  # source_address_prefix = ["10.0.0.0/22"]  #was giving err
 
+  # rule to allow from only within subnet, covers ssh.
   security_rule {
     name                       = "inboundAccess"
     priority                   = 100
@@ -60,28 +62,10 @@ resource "azurerm_network_security_group" "project1" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "*"
-    source_address_prefix      = "10.0.0.0/22"
-    destination_address_prefix = "10.0.0.0/22"
+    source_address_prefix      = "10.0.0.0/24"
+    destination_address_prefix = "*"
   }
-  predefined_rules = [
-    {
-      name     = "SSH"
-      priority = "500"
-    }
-  ]
-  custom_rules = [
-    {
-      name                   = "sshRule"
-      priority               = 201
-      direction              = "Inbound"
-      access                 = "Allow"
-      protocol               = "tcp"
-      source_port_range      = "*"
-      destination_port_range = "22"
-      source_address_prefix  = "10.0.0.0/22"
-      description            = "ssh-for-our-subnet-only"
-    }
-  ]
+  
   tags = {
     ND = "1"
   }
@@ -101,14 +85,18 @@ resource "azurerm_public_ip" "project1" {
 
 # step 5: defining Net Intfc.
 resource "azurerm_network_interface" "project1" {
-  name                = "${var.prefix}-nic"
+  count               = "${var.VMCount > 2 && var.VMCount < 6 ? var.VMCount : 2}"
+  name                = "${var.prefix}${count.index}-nic"
   resource_group_name = azurerm_resource_group.project1.name
   location            = azurerm_resource_group.project1.location
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = azurerm_subnet.internal.id
+    subnet_id                     = azurerm_subnet.project1.id
     private_ip_address_allocation = "Dynamic"
+  }
+  tags = {
+    ND = "1"
   }
 }
 
@@ -138,8 +126,10 @@ resource "azurerm_lb_backend_address_pool" "project1" {
 
 # step 6: part 3
 resource "azurerm_network_interface_backend_address_pool_association" "project1" {
-  network_interface_id    = azurerm_network_interface.project1.id
-  ip_configuration_name   = "${var.prefix}-nic-lb-pool-cfg"
+  count               = "${var.VMCount > 2 && var.VMCount < 6 ? var.VMCount : 2}"
+  network_interface_id    = azurerm_network_interface.project1[count.index].id
+  ip_configuration_name   = "internal" ### azurerm_network_interface.project1[count.index].name  ### "${var.prefix}${count.index}-nic-lb-pool-cfg"
+  ###  ip_configuration_name should exist on azurerm_network_interface
   backend_address_pool_id = azurerm_lb_backend_address_pool.project1.id
 }
 
@@ -159,27 +149,31 @@ resource "azurerm_availability_set" "project1" {
 # step 9: create VMs using packer image. 1 VM
 #
 # sub-step-1: create a reference to the Packer image:
-data "azurerm_image" "packer-image" {
+data "azurerm_image" "PackerImage" {
   name                = "myPackerImage"
   resource_group_name = azurerm_resource_group.project1.name
 }
 #
 # sub-step-2: build VM based on above ref.
 resource "azurerm_linux_virtual_machine" "project1" {
-  name                            = "${var.prefix}-vm"
+  count             = "${var.VMCount > 2 && var.VMCount < 6 ? var.VMCount : 2}"
+      #refer: https://www.terraform.io/docs/configuration-0-11/interpolation.html#conditionals
+  name                            = "${var.prefix}${count.index}-vm"
   resource_group_name             = azurerm_resource_group.project1.name
   location                        = azurerm_resource_group.project1.location
   size                            = "Standard_D2s_v3"
   admin_username                  = var.username      #value at runtime
   admin_password                  = var.password
   disable_password_authentication = false
-  network_interface_ids = [
-    azurerm_network_interface.project1.id,
+  availability_set_id             = azurerm_availability_set.project1.id
+  network_interface_ids           = [
+    azurerm_network_interface.project1[count.index].id,
   ]
 
-  source_image_id = data.azurerm_image.packer-image.id
+  source_image_id = data.azurerm_image.PackerImage.id
 
   os_disk {
+    name                 = "${var.prefix}${count.index}-OSdisk"
     storage_account_type = "Standard_LRS"
     caching              = "ReadWrite"
   }
@@ -188,3 +182,20 @@ resource "azurerm_linux_virtual_machine" "project1" {
     ND = "1"
   }
 }
+
+# step 10: creat emanaged disk
+# refer: https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/managed_disk
+resource "azurerm_managed_disk" "project1" {
+  count                = "${var.VMCount > 2 && var.VMCount < 6 ? var.VMCount : 2}"
+  name                 = "${var.prefix}${count.index}-mDisk"
+  location             = azurerm_resource_group.project1.location
+  resource_group_name  = azurerm_resource_group.project1.name
+  storage_account_type = "Standard_LRS"
+  create_option        = "Empty"
+  disk_size_gb         = "1"
+
+  tags = {
+    ND = "1"
+  }
+}
+
