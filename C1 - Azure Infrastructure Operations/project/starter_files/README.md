@@ -24,16 +24,20 @@ Lets first clone the repo:
 	$ git clone https://github.com/udacity/nd082-Azure-Cloud-DevOps-Starter-Code.git
 	
 2. cd to the starter_files folder.
+<pre>
 	cd '/home/git-clone/nd082-Azure-Cloud-DevOps-Starter-Code/C1 - Azure Infrastructure Operations/project/starter_files'
 
 	Using your editor of choice,
 		edit the server.json for your setup and requirements.
 		edit the variables.tf for your setup and requirements.
 		edit the main.tf for your setup and requirements.
-	
+</pre>
+
 3. To deploy using Terraform you will need a service principal. create one before hand:
+<pre>
 	$ az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/<your-subscription-ID>"
 	save the output and use it in your variables.tf
+</pre>
 	
 4. in short:
 <pre>
