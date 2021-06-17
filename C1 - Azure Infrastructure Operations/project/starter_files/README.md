@@ -43,19 +43,19 @@ variable "prefix" {
 }
 
 variable "tenant_id" {
-    default = "<your-tenant-id>"
+    default = "your-tenant-id"
 }
 
 variable "client_id" {  
-    default="<your-client-id>"
+    default="your-client-id"
 }
 
 variable "client_secret" {  
-    default="<svc-principal-secret>"
+    default="svc-principal-secret"
 }
 
 variable "subscription_id" {  
-    default="<your-subscription-id>"
+    default="your-subscription-id"
 }
 
 variable "location" {
@@ -80,7 +80,7 @@ variable "VMCount" {
 
 3. To deploy using Terraform you will need a service principal. create one before hand:
 <pre>
-	$ az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/<your-subscription-ID>"
+	$ az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/your-subscription-ID"
 	save the output and use it in your variables.tf
 </pre>
 	
@@ -91,7 +91,7 @@ variable "VMCount" {
 	terraform apply -target=azurerm_resource_group.project1		### Create in Azure
 	packer validate server.json
 	packer build server.json					### creating Packer VM Image in Azure
-	terraform plan "solution.plan"					### checking and saving terraform site/code config
+	terraform plan -out solution.plan				### checking and saving terraform site/code config
 	terraform apply "solution.plan"					### deploying saved terraform site/code config to Azure.
 	..try some az commands to check your resources...
 	terraform destroy						### destroy the code deployed using terraform site/code config
