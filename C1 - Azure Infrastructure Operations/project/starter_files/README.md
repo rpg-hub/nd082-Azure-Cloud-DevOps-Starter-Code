@@ -27,10 +27,10 @@ Lets first clone the repo:
 <pre>
 	cd '/home/git-clone/nd082-Azure-Cloud-DevOps-Starter-Code/C1 - Azure Infrastructure Operations/project/starter_files'
 
-	Using your editor of choice,
-		edit the server.json for your setup and requirements.
-		edit the variables.tf for your setup and requirements.
-		edit the main.tf for your setup and requirements.
+	Using your editor of choice, edit for your setup and requirements.
+		server.json		Packer template
+		variables.tf		Terraform variables declaration template
+		main.tf			Main Terraform template for defining state, and deployment.
 </pre>
 
 3. To deploy using Terraform you will need a service principal. create one before hand:
