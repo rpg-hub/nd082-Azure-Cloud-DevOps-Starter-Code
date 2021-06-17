@@ -1,24 +1,27 @@
 # variables.tf
 # Author: Rajeev
+# this file for git-hub only
+
+#these values can be obtained from portal or are only displayed (secret) when creating Service Principal.
 
 variable "prefix" {  
     default = "nanod"
 }
 
 variable "tenant_id" {
-    default = "cbd14134-0c59-4a68-8ae9-e5d3a3cb9b7e"
+    default = "your_tenant_id"
 }
 
 variable "client_id" {  
-    default="13c8df85-dcf5-46cd-b697-30a5f06a15ed"
+    default="your_client_id"
 }
 
 variable "client_secret" {  
-    default="vib3Wwc6h3L_KiGm7k2z3qejkY2U0yYyR7"
+    default="your_client secret"
 }
 
 variable "subscription_id" {  
-    default="4938c642-c8f0-4edd-8f0d-89337969f78e"
+    default="your_subscription_id"
 }
 
 variable "location" {

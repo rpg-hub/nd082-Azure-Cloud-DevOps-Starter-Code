@@ -128,8 +128,7 @@ resource "azurerm_lb_backend_address_pool" "project1" {
 resource "azurerm_network_interface_backend_address_pool_association" "project1" {
   count               = "${var.VMCount > 2 && var.VMCount < 6 ? var.VMCount : 2}"
   network_interface_id    = azurerm_network_interface.project1[count.index].id
-  ip_configuration_name   = "internal" ### azurerm_network_interface.project1[count.index].name  ### "${var.prefix}${count.index}-nic-lb-pool-cfg"
-  ###  ip_configuration_name should exist on azurerm_network_interface
+  ip_configuration_name   = "internal"    ###  ip_configuration_name should exist on azurerm_network_interface, should match
   backend_address_pool_id = azurerm_lb_backend_address_pool.project1.id
 }
 
@@ -183,7 +182,7 @@ resource "azurerm_linux_virtual_machine" "project1" {
   }
 }
 
-# step 10: creat emanaged disk
+# step 10: create managed disk
 # refer: https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/managed_disk
 resource "azurerm_managed_disk" "project1" {
   count                = "${var.VMCount > 2 && var.VMCount < 6 ? var.VMCount : 2}"
