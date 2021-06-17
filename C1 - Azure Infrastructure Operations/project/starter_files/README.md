@@ -36,6 +36,7 @@ Lets first clone the repo:
 	save the output and use it in your variables.tf
 	
 4. in short:
+<pre>
 	terraform validate						### validate your config in scripts
 	terraform plan -target=azurerm_resource_group.project1		### builds RG
 	terraform apply -target=azurerm_resource_group.project1		### Create in Azure
@@ -45,7 +46,7 @@ Lets first clone the repo:
 	terraform apply "solution.plan"					### deploying saved terraform site/code config to Azure.
 	..try some az commands to check your resources...
 	terraform destroy						### destroy the code deployed using terraform site/code config
-
+</pre>
 	run terraform and packer commands from the same folder where the scripts are.
 
 ### Output
