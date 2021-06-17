@@ -33,6 +33,51 @@ Lets first clone the repo:
 		main.tf			Main Terraform template for defining state, and deployment.
 </pre>
 
+2.a: modifying variables.tf, for example:
+<pre>
+# variables.tf
+# Author: Rajeev
+
+variable "prefix" {  
+    default = "nanod"
+}
+
+variable "tenant_id" {
+    default = "<your-tenant-id>"
+}
+
+variable "client_id" {  
+    default="<your-client-id>"
+}
+
+variable "client_secret" {  
+    default="<svc-principal-secret>"
+}
+
+variable "subscription_id" {  
+    default="<your-subscription-id>"
+}
+
+variable "location" {
+    description = "The Azure Region in which all resources in this example should be created."
+    default = "eastus"  ##choose your region of choice here
+}
+
+variable "username" {
+  description = "enter user name:"
+}
+
+variable "password" {
+  description = "enter user password:"
+}
+
+variable "VMCount" {
+    description = "How many VMs do you want to start with (number)? default=2 max=5"  ## the limits are controlled in main.tf
+    type = number
+}
+</pre>
+
+
 3. To deploy using Terraform you will need a service principal. create one before hand:
 <pre>
 	$ az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/<your-subscription-ID>"
