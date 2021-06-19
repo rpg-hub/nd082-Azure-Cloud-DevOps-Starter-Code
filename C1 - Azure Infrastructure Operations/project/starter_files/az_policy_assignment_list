@@ -1,0 +1,38 @@
+$ az policy assignment list
+[
+  {
+	"description": "ND tag and value 1 is req",
+	"displayName": "tagging-policy-assignment",
+	"enforcementMode": "Default",
+	"id": "/subscriptions/4938c642-c8f0-4edd-8f0d-89337969f78e/providers/Microsoft.Authorization/policyAssignments/8fcde3d95cdf44d884266e6c",
+	"identity": null,
+	"location": null,
+	"metadata": {
+	  "assignedBy": "Rajeev Prasad",
+	  "createdBy": "8aa37056-a39d-401e-93f8-ba2d3151dcd2",
+	  "createdOn": "2021-05-27T22:17:06.4044428Z",
+	  "parameterScopes": {},
+	  "updatedBy": null,
+	  "updatedOn": null
+	},
+	"name": "8fcde3d95cdf44d884266e6c",
+	"nonComplianceMessages": [
+	  {
+		"message": "Tag ND not defined, is required.",
+		"policyDefinitionReferenceId": null
+	  }
+	],
+	"notScopes": [],
+	"parameters": {
+	  "tagName": {
+		"value": "ND"
+	  },
+	  "tagValue": {
+		"value": "1"
+	  }
+	},
+	"policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/1e30110a-5ceb-460c-a204-c1c3969c6d62",
+	"scope": "/subscriptions/4938c642-c8f0-4edd-8f0d-89337969f78e",
+	"type": "Microsoft.Authorization/policyAssignments"
+  }
+]
