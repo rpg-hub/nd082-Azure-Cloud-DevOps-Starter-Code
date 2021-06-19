@@ -1,7 +1,10 @@
 # Azure Infrastructure Operations Project: Deploying a scalable IaaS web server in Azure
 
 ### Introduction
-For this project, you will write a Packer template and a Terraform template to deploy a customizable, scalable web server in Azure.
+This project intend to deploy a sclable web server solution on Azure Cloud. We are going to use Hashicorp tools, Terraform and Packer for deploying our infrastructure.
+Packer is an open-source VM image creation tool from Hashicorp. You declare the state of the VM image you need, and Packer will build it for you. This image is created in cloud (Azure or AWS).
+Terraform is an open-source IAC creation and deployment tool from Hashicorp. Terraform uses image created by Packer to deploy the IAC archetecture. User describes state of the infrastructure, as required, in HCL langugage and using Terraform will build the infrastructure, to the defined state, in cloud.
+
 
 ### Getting Started
 1. Clone this repository
