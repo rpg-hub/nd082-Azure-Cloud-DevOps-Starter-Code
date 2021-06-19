@@ -1,27 +1,29 @@
 # variables.tf
 # Author: Rajeev
-# this file for git-hub only
-
-#these values can be obtained from portal or are only displayed (secret) when creating Service Principal.
 
 variable "prefix" {  
+    description = "Prefix will be used in all resources like RG, VM NIC etc. to easily identify the deployement."
     default = "nanod"
 }
 
 variable "tenant_id" {
-    default = "your_tenant_id"
+    description = "Azure tenant ID"
+    default = "cbd141xxxxxxxxxa3cb9b7e"
 }
 
 variable "client_id" {  
-    default="your_client_id"
+    description = "Azure Service Principal ID"
+    default="13c8xxxxxxxxxxxxxxxxx06a15ed"
 }
 
 variable "client_secret" {  
-    default="your_client secret"
+    description = "Azure secret for Service Principal"
+    default="vib3WwxxxxxxxxxxxxxxxxyYyR7"
 }
 
 variable "subscription_id" {  
-    default="your_subscription_id"
+    description = "Azure subscription ID."
+    default="4938cxxxxxxxxxxxxxx9f78e"
 }
 
 variable "location" {
@@ -30,14 +32,17 @@ variable "location" {
 }
 
 variable "username" {
-  description = "enter user name:"
+  description = "VM user name:"
+  default = "adminuser"
 }
 
 variable "password" {
-  description = "enter user password:"
+  description = "VM user password:"
+  default = "Password123!"
 }
 
 variable "VMCount" {
     description = "How many VMs do you want to start with (number)? default=2 max=5"
     type = number
+    default = 2
 }
